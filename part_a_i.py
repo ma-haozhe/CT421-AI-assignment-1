@@ -12,7 +12,7 @@ import csv
 
 def binary_strings(len):
     output = []
-    for i in range(50):
+    for i in range(500):
         binary_string = ""
         for j in range(len):
             binary_string += str(random.randint(0, 1))
@@ -130,7 +130,7 @@ def one_max():
     #generation counter
     generation = 0
     # print('original population:', populaton)
-    for i in range(7000):
+    for i in range(20000):
         # step2 calculate the fitness of this generation (mean?)
         # write this to csv later
         fitness = count_fitness(populaton)
@@ -152,4 +152,4 @@ def one_max():
             break
 
 
-#one_max()
+one_max()
