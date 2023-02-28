@@ -9,7 +9,6 @@
 # well that is truely quite deceptive.
 
 import part_a_i
-import part_a_ii
 
 # change the fitness counting function
 def count_fitness_3(binary_strings):
@@ -59,4 +58,4 @@ def one_max_2():
             #csv_writer.close()
         #    break
 
-one_max_2()
+#one_max_2()
