@@ -6,7 +6,12 @@ import csv
 import part_a_i
 import part_a_ii
 import random
+import matplotlib.pyplot as plt
 
+num_tests = 5
+test_data =[]
+x_plt = []
+y_plt = []
 # expand this to decimal numbers, string length still = 30
 target_dec = '012345678909876543211234567890'
 
@@ -20,16 +25,16 @@ def mutation_1(offspring_pair):
     for i in range(len(offspring_pair[0])):
         if random.random() < 0.1:
             offspring_pair[0][i] = str(random.randint(0,9))
-            print('str1 changed')
+            #print('str1 changed')
 
     for i in range(len(offspring_pair[1])):
         if random.random() < 0.1:
             offspring_pair[1][i] = str(random.randint(0,9))
-            print('str2 changed')
+            #print('str2 changed')
 
     offspring_pair[0] = ''.join(offspring_pair[0])
     offspring_pair[1] = ''.join(offspring_pair[1])
-    print('offspring pair', offspring_pair)
+    #print('offspring pair', offspring_pair)
     return offspring_pair
 
 
@@ -85,7 +90,7 @@ def replace_individual_2(binary_strings, offspring_pair):
     # select the two binary strings with the highest scores
     best_binary_strings = sorted_binary_strings[:2]
     # print the result
-    print(best_binary_strings)
+    #print(best_binary_strings)
     # now we have the least fitted index from the population list
     binary_strings[min1_index] = best_binary_strings[0]
     binary_strings[min2_index] = best_binary_strings[1]
@@ -96,17 +101,17 @@ def one_max_3():
     csv_writer = csv.writer(open('output.csv', 'w'))
     csv_writer.writerow(['Generation', 'Average fitness'])
     # step1 init population of 50.
+    data = []
     populaton = generate_strings(30)
     #generation counter
     generation = 0
     # print('original population:', populaton)
-    for i in range(20000):
+    for i in range(30000):
         # step2 calculate the fitness of this generation (mean?)
         # write this to csv later
         #for this problem, the fitness counting function is from problem ii. 
         fitness = count_fitness_3(populaton)
         avg_fitness = sum(fitness) / len(fitness)
-        print('current gen fitness: ', avg_fitness)
         # step3 perform crossover
         offspring = part_a_i.shuffle_and_crossover(populaton)
         # step4 pass the two offspring to mutate, 10% mutation probability.
@@ -116,11 +121,36 @@ def one_max_3():
         # step6 replace low fitness individuals with offspring
         replace_individual_2(populaton, offspring)
         generation += 1
-        print('generation:', generation)
         csv_writer.writerow([generation, avg_fitness])
+        data.append([generation, avg_fitness])
         if avg_fitness == 30:
-            #csv_writer.close()
-            break
+            print('current gen fitness: ', avg_fitness)
+            print('generation:', generation)
+            return data
+        
+def plot():
+    for i in range(num_tests):
+        test_results = one_max_3()
+        test_data.append(test_results)
 
-one_max_3()
+    #print(test_data)
+    colours = ['r', 'g', 'b', 'c', 'm']
+    labels = [0, 1, 2, 3, 4]
+    for i in range(num_tests):
+        for j in range(len(test_data[i])):
+            plt.plot(test_data[i][j][0], test_data[i]
+                     [j][1], '.', color=colours[i])
+
+   # clset = set(zip(colours, labels))
+
+    # add a legend and axis labels
+
+    plt.xlabel('generation')
+    plt.ylabel('fitness')
+
+    # show the plot
+    plt.show()
+
+#one_max_3()
+plot()
 

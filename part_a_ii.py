@@ -100,4 +100,4 @@ def one_max_1():
             break
     # print(populaton)
 
-# one_max_1()
+#one_max_1()

@@ -6,13 +6,43 @@
 
 import random
 import csv
-
+import numpy as np
+import matplotlib.pyplot as plt
 # step 1: we first generate a population of string (length = 30)
+x_plt = []
+y_plt = []
+# test_data stores the multiple runs of our code to the list and plot them in one graph.
+test_data = []
+num_tests = 5
+
+
+def plot():
+    for i in range(num_tests):
+        test_results = one_max()
+        test_data.append(test_results)
+
+    print(test_data)
+    colours = ['r', 'g', 'b', 'c', 'm']
+    labels = [0, 1, 2, 3, 4]
+    for i in range(num_tests):
+        for j in range(len(test_data[i])):
+            plt.plot(test_data[i][j][0], test_data[i]
+                     [j][1], '.', color=colours[i])
+
+   # clset = set(zip(colours, labels))
+
+    # add a legend and axis labels
+
+    plt.xlabel('generation')
+    plt.ylabel('fitness')
+
+    # show the plot
+    plt.show()
 
 
 def binary_strings(len):
     output = []
-    for i in range(500):
+    for i in range(50):
         binary_string = ""
         for j in range(len):
             binary_string += str(random.randint(0, 1))
@@ -125,17 +155,17 @@ def replace_individual(binary_strings, offspring_pair):
 def one_max():
     csv_writer = csv.writer(open('output.csv', 'w'))
     csv_writer.writerow(['Generation', 'Average fitness'])
+    data = []
     # step1 init population of 50.
     populaton = binary_strings(30)
-    #generation counter
+    # generation counter
     generation = 0
     # print('original population:', populaton)
-    for i in range(20000):
+    for i in range(7000):
         # step2 calculate the fitness of this generation (mean?)
         # write this to csv later
         fitness = count_fitness(populaton)
         avg_fitness = sum(fitness) / len(fitness)
-        print('current gen fitness: ', avg_fitness)
         # step3 perform crossover
         offspring = shuffle_and_crossover(populaton)
         # step4 pass the two offspring to mutate, 10% mutation probability.
@@ -145,11 +175,15 @@ def one_max():
         # step6 replace low fitness individuals with offspring
         replace_individual(populaton, offspring)
         generation += 1
-        print('generation:', generation)
+        print('generation:', generation,
+              ', current gen fitness: ', avg_fitness, "\r", end="")
         csv_writer.writerow([generation, avg_fitness])
-        if avg_fitness == 30:
-            #csv_writer.close()
-            break
+        data.append([generation, avg_fitness])
+        # if avg_fitness == 30:
+        # csv_writer.close()
+        # break
+
+    return data
 
 
-#one_max()
+#plot()
